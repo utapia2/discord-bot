@@ -47,7 +47,7 @@ client.on('message', msg => {
 
 client.on('message', msg => {
 
-  if(msg.content.toLowerCase() === 'shit' || msg.content.toLowerCase() === 'fuck'){
+  if(msg.content.toLowerCase() === 'crap' || msg.content.toLowerCase() === 'fuck'){
 
     var id = msg.author.id;
 
