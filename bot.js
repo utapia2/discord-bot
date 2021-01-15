@@ -9,6 +9,7 @@ const client = new Discord.Client();
 
 client.once('ready', () => {
     console.log('ModBot is online');
+    msg.channel.send('I am now online');
 });
 
 
@@ -59,10 +60,10 @@ client.on('message', msg => {
     const User = client.users.cache.get(id);
     msg.channel.send(":wave: " + User.username + " has been successfully kicked :point_right: ");
 
-    //mem.kick().then(() => {
+    mem.kick().then(() => {
 
-      //msg.channel.send(":wave: " + mem.displayName + " has been successfully kicked :point_right: ");
-    //})
+    msg.channel.send(":wave: " + mem.displayName + " has been successfully kicked :point_right: ");
+    })
 
   }
 
