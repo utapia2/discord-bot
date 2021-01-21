@@ -6,7 +6,6 @@ const {prefix, token} = require('./config.json');
 const client = new Discord.Client();
 
 
-
 client.once('ready', () => {
     console.log('ModBot is online');
     
@@ -28,11 +27,13 @@ client.on('message', msg => {
     }
 
     else if (msg.content.toLowerCase().startsWith(prefix + 'kick')) {
+      
       if (!msg.mentions.users.size) {
         return msg.reply('you need to tag a user in order to kick them!');
       }
 
       var member= msg.mentions.members.first();
+
       console.log(member);
       member.kick().then((member) => {
         msg.channel.send(":wave: " + member.displayName + " has been successfully kicked :point_right: ");
@@ -40,9 +41,6 @@ client.on('message', msg => {
         msg.channel.send("Access Denied");
       });
     }
-
-
-
 })
 
 client.on('message', msg => {
@@ -50,17 +48,12 @@ client.on('message', msg => {
   if(msg.content.toLowerCase() === 'shit' || msg.content.toLowerCase() === 'fuck'){
 
     var id = msg.author.id;
-
     console.log(id);
-
-
     msg.guild.members.cache.get(id).kick();
-
     const User = client.users.cache.get(id);
     msg.channel.send(":wave: " + User.username + " has been successfully kicked :point_right: ");
+
   }
-
-
-
 })
+
 client.login(token);
