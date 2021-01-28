@@ -1,15 +1,18 @@
 
 const Discord = require('discord.js');
-
+const db = require("quick.db");
 
 const {prefix, token} = require('./config.json');
 const client = new Discord.Client();
 
+var warnings = new db.table('warnings');
 
 client.once('ready', () => {
+
     console.log('ModBot is online');
     
 });
+
 
 client.on('message', msg => {
 
@@ -34,7 +37,6 @@ client.on('message', msg => {
 
       var member= msg.mentions.members.first();
 
-      console.log(member);
       member.kick().then((member) => {
         msg.channel.send(":wave: " + member.displayName + " has been successfully kicked :point_right: ");
       }).catch(() => {
@@ -43,17 +45,31 @@ client.on('message', msg => {
     }
 })
 
+
 client.on('message', msg => {
 
-  if(msg.content.toLowerCase() === 'shit' || msg.content.toLowerCase() === 'fuck'){
-
+  if(msg.content.toLowerCase().includes("shit")  || msg.content.toLowerCase().includes("fuck")){
     var id = msg.author.id;
-    console.log(id);
-    msg.guild.members.cache.get(id).kick();
     const User = client.users.cache.get(id);
-    msg.channel.send(":wave: " + User.username + " has been successfully kicked :point_right: ");
+    console.log(id + "-------getting the bad word from this user");
+    
+    if(warnings.get(id.toString()) === null || warnings.get(id.toString()) === 0){
 
+      warnings.set(id.toString(), 1);
+      msg.channel.send( User.username + " you now have 1 warning");
+    }
+    else if(Number(warnings.get(id.toString())) > 3){
+      msg.guild.members.cache.get(id).kick();
+      msg.channel.send(":wave: " + User.username + " has been successfully kicked :point_right: ");
+      warnings.set(id.toString(), 0);
+    }
+    else{
+      warnings.add(id.toString(), 1);
+      msg.channel.send( User.username + " you now have " + warnings.get(id.toString()) + " warning(s)");
+      console.log(id + " has " + warnings.get(id.toString()));
+    }
   }
+
 })
 
 client.login(token);
