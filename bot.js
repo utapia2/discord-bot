@@ -51,21 +51,21 @@ client.on('message', msg => {
     var id = msg.author.id;
     const User = client.users.cache.get(id);
     console.log(id + "-------getting the bad word from this user");
-    console.log(warnings.get(id));
+    
     
     if(warnings.get(id) === null || warnings.get(id) === 0){
 
       warnings.set(id.toString(), 1);
-      msg.channel.send( User.username + " you now have 1 warning");
-      console.log(warnings.get(id));
+      msg.channel.send( User.username + " now has 1 warning");
+      
     }
     else if(warnings.get(id) != null || warnings.get(id) != 0){
       warnings.add(id, 1);
-      msg.channel.send( User.username + " you now have " + warnings.get(id) + " warning(s)");
+      msg.channel.send( User.username + " now has " + warnings.get(id) + " warnings");
       if(warnings.get(id) == 2){
         msg.channel.send( User.username + " one more warning and you will be kicked!");
       }
-      console.log(id + " has " + warnings.get(id) + " warnings");
+      
     }
     if(Number(warnings.get(id.toString())) == 3){
       console.log("triggered");
@@ -73,9 +73,7 @@ client.on('message', msg => {
       msg.channel.send(":wave: " + User.username + " has been successfully kicked :point_right: ");
       warnings.set(id, 0);
     }
-    
   }
-
 })
 
 client.login(token);
