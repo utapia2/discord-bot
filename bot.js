@@ -67,7 +67,7 @@ client.on('message', msg => {
       }
       
     }
-    if(Number(warnings.get(id.toString())) == 3){
+    if(Number(warnings.get(id)) == 3){
       console.log("triggered");
       msg.guild.members.cache.get(id).kick();
       msg.channel.send(":wave: " + User.username + " has been successfully kicked :point_right: ");
