@@ -10,8 +10,6 @@ var warnings = new db.table('warnings');
 client.once('ready', () => {
 
     console.log('ModBot is online');
-    
-    
 });
 
 
@@ -49,26 +47,33 @@ client.on('message', msg => {
 
 client.on('message', msg => {
 
-  if(msg.content.toLowerCase().includes("shit")  || msg.content.toLowerCase().includes("fuck")){
+  if(msg.content.toLowerCase().includes("shit") || msg.content.toLowerCase().includes("fuck")){
     var id = msg.author.id;
     const User = client.users.cache.get(id);
     console.log(id + "-------getting the bad word from this user");
+    console.log(warnings.get(id));
     
-    if(warnings.get(id.toString()) === null || warnings.get(id.toString()) === 0){
+    if(warnings.get(id) === null || warnings.get(id) === 0){
 
       warnings.set(id.toString(), 1);
       msg.channel.send( User.username + " you now have 1 warning");
+      console.log(warnings.get(id));
     }
-    else if(Number(warnings.get(id.toString())) > 3){
+    else if(warnings.get(id) != null || warnings.get(id) != 0){
+      warnings.add(id, 1);
+      msg.channel.send( User.username + " you now have " + warnings.get(id) + " warning(s)");
+      if(warnings.get(id) == 2){
+        msg.channel.send( User.username + " one more warning and you will be kicked!");
+      }
+      console.log(id + " has " + warnings.get(id) + " warnings");
+    }
+    if(Number(warnings.get(id.toString())) == 3){
+      console.log("triggered");
       msg.guild.members.cache.get(id).kick();
       msg.channel.send(":wave: " + User.username + " has been successfully kicked :point_right: ");
-      warnings.set(id.toString(), 0);
+      warnings.set(id, 0);
     }
-    else{
-      warnings.add(id.toString(), 1);
-      msg.channel.send( User.username + " you now have " + warnings.get(id.toString()) + " warning(s)");
-      console.log(id + " has " + warnings.get(id.toString()));
-    }
+    
   }
 
 })
